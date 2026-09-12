@@ -1,0 +1,34 @@
+name: test
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.12", "3.13"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install
+        run: |
+          pip install pytest pytest-asyncio pyflakes
+          # 核心依赖来自 PyPI; 尚未发布时回退到 git (0.3.0 发布后此回退自然失效).
+          # 发布后应扩展为 "最低支持版本 × 最新版本" 矩阵 (见 docs/design.md §6).
+          pip install "pavoz>=0.3,<0.4" || pip install "pavoz @ git+https://github.com/liyong-labs/pavoz@main"
+          pip install -e . --no-deps
+      - name: Lint (pyflakes)
+        run: |
+          python -m pyflakes pavoz_extensions tests tools
+      - name: Public API guard
+        run: |
+          python tools/check_public_api.py
+      - name: Test
+        run: |
+          python -m pytest tests/ -q

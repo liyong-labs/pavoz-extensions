@@ -31,25 +31,28 @@ pavoz_extensions/
 
 ```python
 def gate(
-    reviewers: Sequence[Callable[[Any, Ctx], Awaitable[tuple[float, str]]]],
+    reviewers: Mapping[str, Callable[[Any, Ctx], Awaitable[tuple[float, str]]]],
     revise: Callable[[Any, str, Ctx], Awaitable[Any]] | None = None,
+    *,
     threshold: float = 7.0,
     max_iter: int = 3,
     aggregate: Literal["min", "mean"] = "min",
     on_exhaustion: Literal["raise", "best_effort"] = "raise",
     concurrency: int = 1,
+    event: str = "gate_score",
 ) -> Callable[[NodeFn], NodeFn]
 ```
 
 | 参数 | 语义 |
 |---|---|
-| `reviewers` | 每个返回 `(score, critique)`; score 与 `threshold` 同尺度 (默认 0–10)。可为 async 函数, 内部通常 `await ctx.call("llm", ...)` |
+| `reviewers` | `{lens 名: 可调用}` — 每个返回 `(score, critique)`; score 与 `threshold` 同尺度 (默认 0–10)。lens 名进事件 payload, 所以用 Mapping 而非裸序列。可为 async 函数, 内部通常 `await ctx.call("llm", ...)` |
 | `revise` | 把 critique 喂回, 产出下一版; `None` 时只评分不改 (只用于观测/日志) |
 | `threshold` | 达标线; `score >= threshold` 即收敛 |
 | `max_iter` | 最大迭代轮数 (含首轮); ≥1 |
 | `aggregate` | `min` (默认, 最严一票否决) / `mean` |
 | `on_exhaustion` | `raise` (默认, 抛 `GateFailedError(StageError)`) / `best_effort` (返回最高分产物) |
-| `concurrency` | `1` = 串行 (默认); `>1` 时同一轮的 reviewer 并发 `asyncio.gather`, 分块大小 = concurrency |
+| `concurrency` | `1` = 串行 (默认); `>1` 时同一轮的 reviewer 并发 (`asyncio.Semaphore(N)` + `gather`), 结果按 lens 声明顺序回收 |
+| `event` | 事件名 (默认 `gate_score`), 需要区分多个 gate 时可改 |
 
 ### 2.2 控制流
 
@@ -202,4 +205,4 @@ sys.exit(1 if bad else 0)
 ## 10. 开放问题
 
 1. License: 本仓 Apache-2.0 vs 核心 MIT —— 待维护者定 (PRD §8)
-2. `concurrency>1` 时事件里各 lens 的完成顺序不稳定 —— 事件 payload 只保证集合, 不保证顺序 (文档写明)
+2. ~~`concurrency>1` 时 lens 完成顺序不稳定~~ —— 已解决: 结果按 lens 声明顺序回收, 事件 payload 顺序确定
