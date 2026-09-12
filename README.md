@@ -6,12 +6,14 @@ Two plain decorators over stage functions. pavoz core needs no changes, and core
 
 ## Install
 
-0.1.0 is not on PyPI yet:
+0.1.0 is not on PyPI yet, and neither is pavoz 0.3.0 — install core from git first, then this pack:
 
 ```bash
-pip install "pavoz>=0.3,<0.4"
-pip install git+https://github.com/liyong-labs/pavoz-extensions
+pip install "pavoz @ git+https://github.com/liyong-labs/pavoz@main"
+pip install --no-deps git+https://github.com/liyong-labs/pavoz-extensions@main
 ```
+
+Once both are published, this collapses to `pip install pavoz-extensions`.
 
 ## `@gate` — quality convergence loop
 
