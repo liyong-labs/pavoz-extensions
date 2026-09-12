@@ -1,0 +1,30 @@
+# pavoz-extensions
+
+> Official extension pack for pavoz: `@gate` (worker → multi-lens review → score → revise convergence loop) and `@schema` (cross-stage contract validation). Two plain decorators over stage functions — pavoz core needs no changes, and core never depends on this package.
+
+Install (not on PyPI yet): `pip install "pavoz @ git+https://github.com/liyong-labs/pavoz@main"` then `pip install --no-deps git+https://github.com/liyong-labs/pavoz-extensions@main`
+
+## Start here
+
+- [README.md](README.md) · [README.cn.md](README.cn.md): what each decorator does, minimal usage, cost bounds
+- [docs/PRD.md](docs/PRD.md): scope, requirements, success criteria, what is deliberately out of 0.1.0
+- [docs/design.md](docs/design.md): `@gate` / `@schema` contracts, control flow, boundaries, CI design
+- Source: `pavoz_extensions/gate.py`, `pavoz_extensions/schema.py`
+
+## Rules that do not change
+
+- **Public API only.** This pack may import only from the `pavoz` top level — `tools/check_public_api.py` enforces it in CI. `pavoz.runtime` / `pavoz.types` and friends are off-limits.
+- **Core never depends on this pack.** Extensions pin a compatible range (`pavoz>=0.3,<0.4`).
+- **Reviewers are ordinary callables.** No LLM (or any vendor) is assumed anywhere in the API; the tests run with plain functions.
+
+## Before you commit
+
+```bash
+python -m pytest                          # all tests
+python -m pyflakes pavoz_extensions tests tools
+python tools/check_public_api.py          # only pavoz top-level imports
+python tools/check_doc_links.py           # markdown links must resolve
+python tools/check_doc_style.py           # doc style (clichés / versioned headings / punctuation)
+```
+
+Docs in this repo are for humans first: value up front, runnable example early, no dead links.
