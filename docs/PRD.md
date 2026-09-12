@@ -1,9 +1,16 @@
+---
+owner: liyong
+last-verified: 2026-09-13
+applies-to: pavoz-extensions 0.1.0 (pavoz >=0.3,<0.4)
+---
+
 # PRD — pavoz-extensions
 
-**版本**: 0.1.0
-**日期**: 2026-09-13
-**作者**: pavoz 维护侧 (PM/架构师)
-**关联**: pavoz `docs/design/extension-plan-2026-09-13.md`(实施计划) · `docs/review-pavoz-upgrade-plan-2026-09-13.md`(评审) · `docs/design/handoff-upgrade-plan-v2-2026-09-13.md`(给需求方)
+**状态**: completed (2026-09-13) — 0.1.0 首版已实施, 见 [README](../README.md) 用法与 [CHANGELOG](../CHANGELOG.md)
+**读者**: pavoz 维护者 (定范围/验收) + 集成方 (判断该不该用) + 扩展作者 (抄边界)
+**实施计划**: pavoz 仓 `docs/design/extension-plan-2026-09-13.md`
+
+**关键词**: 约束级 **必须** / **不得** (违反即功能不成立), 建议级 **应当** (不遵守有副作用), 可选 **可** — 对应 RFC 2119 的 MUST / MUST NOT / SHOULD / MAY。
 
 ---
 
@@ -39,7 +46,7 @@ pavoz 核心有一条明确的设计立场 (`docs/{cn,en}/architecture.md` 决�
 | 应用开发者 (多 stage 数据流) | 想在上游产出时就发现结构错位, 而不是等到末尾 | `@schema` |
 | 第三方扩展作者 | 想写 `pavoz-notify` / `pavoz-budget`, 需要一个能抄的真实样例 | 两个模块 |
 
-## 4. 范围 (0.1.0)
+## 4. 范围
 
 **做**:
 - `@gate` — worker → N reviewer → 评分 → 反馈重做 → 收敛; 耗尽可配置

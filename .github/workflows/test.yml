@@ -29,9 +29,10 @@ jobs:
       - name: Public API guard
         run: |
           python tools/check_public_api.py
-      - name: Doc links
+      - name: Doc links + style
         run: |
           python tools/check_doc_links.py
+          python tools/check_doc_style.py
       - name: Test
         run: |
           python -m pytest tests/ -q

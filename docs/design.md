@@ -1,8 +1,14 @@
-# Design — pavoz-extensions 0.1.0
+---
+owner: liyong
+last-verified: 2026-09-13
+applies-to: pavoz-extensions 0.1.0 (pavoz >=0.3,<0.4)
+---
 
-**日期**: 2026-09-13
-**状态**: 定稿待实施
-**关联**: `docs/PRD.md` · pavoz `docs/design/extension-plan-2026-09-13.md`
+# Design — pavoz-extensions 扩展设计
+
+**状态**: completed (2026-09-13) — 与 `pavoz_extensions/` 实现同步
+**读者**: 维护者 (改契约前必读) + 扩展作者 (抄边界与测试策略)
+**关联**: `docs/PRD.md` (需求与验收) · pavoz `docs/design/extension-plan-2026-09-13.md` (实施计划)
 
 ---
 
@@ -18,7 +24,7 @@ pavoz_extensions/
 **设计立场**: 两者都是**纯装饰器**, 包在 stage 函数外, 不触碰 pavoz 运行时, 不新增核心 API。
 依据: `pavoz.dag.DAG.stage()` 接收任意 `NodeFn` (`async def(ctx) -> dict`), 装饰器在注册前包一层即可。
 
-**边界规则** (CI 强制, §6):
+**边界规则** (CI 强制, 见 §6 CI 设计):
 - 只允许 `from pavoz import ...` 顶层导入
 - 不 import `pavoz.runtime` / `pavoz.types` / `pavoz.state` 等子模块
 - 不 monkeypatch, 不读写核心私有属性
@@ -204,5 +210,5 @@ sys.exit(1 if bad else 0)
 
 ## 10. 开放问题
 
-1. License: 本仓 Apache-2.0 vs 核心 MIT —— 待维护者定 (PRD §8)
+1. License: 本仓 Apache-2.0 vs 核心 MIT —— 待维护者定 (见 `docs/PRD.md` §8 开放问题)
 2. ~~`concurrency>1` 时 lens 完成顺序不稳定~~ —— 已解决: 结果按 lens 声明顺序回收, 事件 payload 顺序确定
