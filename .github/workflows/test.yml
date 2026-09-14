@@ -19,9 +19,8 @@ jobs:
       - name: Install
         run: |
           pip install pytest pytest-asyncio pyflakes
-          # 核心依赖来自 PyPI; 尚未发布时回退到 git (0.3.0 发布后此回退自然失效).
-          # 发布后应扩展为 "最低支持版本 × 最新版本" 矩阵 (见 docs/design.md §6).
-          pip install "pavoz>=0.3,<0.4" || pip install "pavoz @ git+https://github.com/liyong-labs/pavoz@main"
+          # 核心依赖来自 PyPI (pavoz 0.5.2 起版本线延续 0.5.x).
+          pip install "pavoz>=0.5,<0.6"
           pip install -e . --no-deps
       - name: Lint (pyflakes)
         run: |
