@@ -1,7 +1,7 @@
 ---
 owner: liyong
 last-verified: 2026-09-13
-applies-to: pavoz-extensions 0.1.0 (pavoz >=0.3,<0.4)
+applies-to: pavoz-extensions 0.1.0+ (pavoz >=0.3,<0.4)
 ---
 
 # PRD — pavoz-extensions
@@ -71,7 +71,7 @@ pavoz 核心有一条明确的设计立场 (`docs/{cn,en}/architecture.md` 决�
 | R5 | `schema(input=…, output=…, warn_only=False)` 装饰器 | 接受任意 `Callable[[Any], None]` 校验函数 (pydantic 仅作 extras/文档示例); 违反抛 `StageError` 子类 (终态); `warn_only=True` 只记日志不阻断 |
 | R6 | 异常契约与核心一致 | 只用 `pavoz.StageError` / `RetryableError` / `FatalError` 的子类, 不引入新异常根 |
 | R7 | 只依赖 pavoz 公开 API | CI 结构检查: 源码只允许 `from pavoz import ...` 顶层导入, 出现 `pavoz.runtime` / `pavoz.types` 等子模块即失败 |
-| R8 | 版本兼容可验证 | `pyproject.toml` 声明 `pavoz>=0.3,<0.4`; CI 矩阵跑 (最低支持版本 × 最新版本); import 时 stdlib 校验 `pavoz.__version__`, 不符给出明确报错 |
+| R8 | 版本兼容可验证 | `pyproject.toml` 声明 `pavoz>=0.5,<0.6`; CI 矩阵跑 (最低支持版本 × 最新版本); import 时 stdlib 校验 `pavoz.__version__`, 不符给出明确报错 |
 | R9 | 可直接抄的文档 | README 含: 两个扩展的最小用法、成本上界、并发注意事项、"如何写你自己的 `pavoz-*`"; 公开文档中英同步 |
 
 ## 6. 成功指标
@@ -82,7 +82,7 @@ pavoz 核心有一条明确的设计立场 (`docs/{cn,en}/architecture.md` 决�
 
 ## 7. 约束与依赖
 
-- 运行时依赖: `pavoz>=0.3,<0.4` (PyPI); 可选 `pydantic` (example extras)
+- 运行时依赖: `pavoz>=0.5,<0.6` (PyPI); 可选 `pydantic` (example extras)
 - Python ≥ 3.12 (与核心一致)
 - 不引入 LLM SDK / HTTP 客户端 / 任何 vendor 绑定
 - 发布: PyPI Trusted Publishing (与核心同模式); 发布晚于 `pavoz 0.3.0` 上 PyPI
